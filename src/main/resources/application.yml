@@ -1,0 +1,67 @@
+######################################
+##          Server settings         ##
+######################################
+server:
+  port: 8090
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+######################################
+##           App settings           ##
+######################################
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    tags:
+      application: ${spring.application.name}
+spring:
+  application:
+    name: product-sorting-service
+######################################
+##      Database settings (H2)      ##
+######################################
+  datasource:
+    url: jdbc:h2:mem:productsdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+######################################
+##  Database settings (PostgreSQL)  ##
+######################################
+# datasource:
+#   url: jdbc:postgresql://localhost:5432/products
+#   driver-class-name: org.postgresql.Driver
+#   username: postgres
+#   password: your_password
+# jpa:
+#   database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+######################################
+##         Logging settings         ##
+######################################
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
