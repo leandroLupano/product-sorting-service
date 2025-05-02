@@ -3,12 +3,12 @@ package com.inditex.productsort.model.domain;
 import lombok.Getter;
 
 @Getter
-public abstract class ScoringCriterion {
+public abstract class SortingCriterion {
 
     protected final double weight;
     protected final String name;
 
-    protected ScoringCriterion(double weight, String name) {
+    protected SortingCriterion(double weight, String name) {
         this.weight = weight;
         this.name = name;
     }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Criterion available for sorting products.")
-public class CriterionDTO {
+public class SortingCriterionDTO {
 
     @Schema(description = "Name of the sorting criterion", example = "sales_units_criterion")
     private String name;

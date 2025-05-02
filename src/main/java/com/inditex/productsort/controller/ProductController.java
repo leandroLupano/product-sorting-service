@@ -1,15 +1,17 @@
 package com.inditex.productsort.controller;
 
-import com.inditex.productsort.model.dto.CriterionDTO;
+import com.inditex.productsort.model.dto.SortingCriterionDTO;
 import com.inditex.productsort.model.dto.ProductDTO;
 import com.inditex.productsort.model.dto.SortingRequestDTO;
-import com.inditex.productsort.service.ProductService;
-import com.inditex.productsort.service.ScoringRegistry;
+import com.inditex.productsort.service.SortingCriterionService;
+import com.inditex.productsort.service.SortingService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,23 +27,20 @@ import java.util.List;
 
 public class ProductController {
 
-    private final ProductService productService;
-    private final ScoringRegistry scoringRegistry;
+    private final SortingService sortingService;
+    private final SortingCriterionService sortingCriterionService;
 
     @Operation(summary = "Get all available sorting criteria",
             description = "Retrieve all criteria that can be used to sort the products.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Criteria retrieved successfully",
                             content = @Content(mediaType = "application/json",
-                                    schema = @Schema(implementation = CriterionDTO.class)))
+                                    schema = @Schema(implementation = SortingCriterionDTO.class)))
             })
     @GetMapping("/criteria")
-    public ResponseEntity<List<CriterionDTO>> getAvailableCriteria() {
+    public ResponseEntity<List<SortingCriterionDTO>> listSortingCriteria() {
         log.info("Fetching all available sorting criteria.");
-        List<CriterionDTO> criteria = scoringRegistry.getAll().keySet().stream()
-                .map(CriterionDTO::new)
-                .toList();
-        return ResponseEntity.ok(criteria);
+        return ResponseEntity.ok(sortingCriterionService.getAvailableSortingCriteria());
     }
 
     @Operation(summary = "Sort products based on criteria weights",
@@ -49,10 +48,10 @@ public class ProductController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     required = true,
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(
-                                    implementation = SortingRequestDTO.class,
-                                    example = "{\"weights\": {\"sales_units_criterion\": 0.7, \"stock_criterion\": 0.3}}"
-                            ))
+                            examples = @ExampleObject(
+                                    value = "{\"weights\": {\"sales_units_criterion\": 0.7, \"stock_criterion\": 0.3}}"
+                            ),
+                            schema = @Schema(implementation = SortingRequestDTO.class))
             ),
             responses = {
                     @ApiResponse(responseCode = "200", description = "Products sorted successfully",
@@ -60,9 +59,9 @@ public class ProductController {
                                     schema = @Schema(implementation = ProductDTO.class)))
             })
     @PostMapping("/sort")
-    public ResponseEntity<List<ProductDTO>> sortProducts(@RequestBody SortingRequestDTO request) {
+    public ResponseEntity<List<ProductDTO>> sortProducts(@Valid @RequestBody SortingRequestDTO request) {
         log.info("Sorting products with weights: {}", request.getWeights());
-        List<ProductDTO> sortedProducts = productService.sortProducts(request);
+        List<ProductDTO> sortedProducts = sortingService.sortProducts(request);
         log.info("Products successfully sorted. Total: {}", sortedProducts.size());
         return ResponseEntity.ok(sortedProducts);
     }

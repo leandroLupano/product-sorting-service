@@ -8,14 +8,18 @@
 		<version>3.4.5</version>
 		<relativePath/>
 	</parent>
+
 	<groupId>com.inditex.productsort</groupId>
 	<artifactId>product-sorting-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product-sorting-service</name>
-	<description>REST API to sort products based on configurable criteria such as sales and stock availability.</description>
+	<description>REST API for sorting products based on configurable criteria like sales units and stock availability</description>
+
 	<properties>
 		<java.version>21</java.version>
+		<lombok.version>1.18.32</lombok.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -29,6 +33,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -38,6 +43,10 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
 		</dependency>
 
 		<!-- DB -->
@@ -79,7 +88,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.38</version>
+							<version>${lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

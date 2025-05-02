@@ -5,10 +5,9 @@ import com.inditex.productsort.model.domain.Stock;
 import com.inditex.productsort.model.dto.ProductDTO;
 import com.inditex.productsort.model.entities.ProductEntity;
 import org.springframework.stereotype.Component;
-import java.util.stream.Collectors;
 
 @Component
-public class ProductMapper {
+public final class ProductMapper {
 
     public Product toDomain(ProductEntity entity) {
         return new Product(
@@ -17,7 +16,7 @@ public class ProductMapper {
                 entity.getSalesUnits(),
                 entity.getStocks().stream()
                         .map(stock -> new Stock(stock.getSize(), stock.getQuantity()))
-                        .collect(Collectors.toList())
+                        .toList()
         );
     }
 

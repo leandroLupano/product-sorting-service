@@ -42,7 +42,7 @@ mvn spring-boot:run
 5. The application will start at:
 
 ```
-http://localhost:8080/api/actuator/health
+http://localhost:8080/api/actuator
 ```
 
 ---
